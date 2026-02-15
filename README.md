@@ -22,7 +22,7 @@ A simple billing system built using Django.
 
 ```bash
 git clone <repo-url>
-cd billing-system
+cd billing_system
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
