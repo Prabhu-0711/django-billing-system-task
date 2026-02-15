@@ -1,0 +1,87 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-6">Billing Page</h2>
+
+<form method="POST" class="space-y-6">
+    {% csrf_token %}
+
+    <div>
+        <label class="block font-medium mb-1">Customer Email</label>
+        <input type="email" name="customer_email" placeholder="Customer Email Address"
+               class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
+               required>
+    </div>
+
+    <div id="products" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+            <input type="text" name="product_id" placeholder="Product ID"
+                   class="border rounded-lg p-2" required>
+            <input type="number" name="quantity" placeholder="Quantity"
+                   class="border rounded-lg p-2" min="1" required>
+        </div>
+    </div>
+
+    <button type="button" onclick="addField()"
+            class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+        Add Product
+    </button>
+
+    <hr class="my-6">
+
+    <h3 class="text-lg font-semibold">Denominations Available</h3>
+
+    <div class="grid grid-cols-4 gap-4">
+        {% for denom in denominations %}
+        <div>
+            <label class="block text-sm mb-2 font-semibold ">{{ denom }}</label>
+            <input type="number" name="denom_{{ denom }}"
+                   class="border rounded-lg p-2 w-full" placeholder="Count">
+        </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <label class="block font-medium mt-4 mb-1">Amount Paid</label>
+        <input type="number" name="amount_paid" placeholder="Enter Amount Paid"
+               class="w-full border rounded-lg p-2"
+               required>
+    </div>
+
+    <button type="submit"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        Generate Bill
+    </button>
+</form>
+
+<script>
+function addField() {
+    const container = document.getElementById("products");
+
+    const row = document.createElement("div");
+    row.className = "grid grid-cols-2 gap-4 mt-2";
+
+    const productInput = document.createElement("input");
+    productInput.type = "text";
+    productInput.name = "product_id";
+    productInput.placeholder = "Product ID";
+    productInput.className = "border rounded-lg p-2";
+    productInput.required = true;
+
+    const quantityInput = document.createElement("input");
+    quantityInput.type = "number";
+    quantityInput.name = "quantity";
+    quantityInput.placeholder = "Quantity";
+    quantityInput.className = "border rounded-lg p-2";
+    quantityInput.min = "1";
+    quantityInput.required = true;
+
+    row.appendChild(productInput);
+    row.appendChild(quantityInput);
+
+    container.appendChild(row);
+}
+</script>
+
+{% endblock %}

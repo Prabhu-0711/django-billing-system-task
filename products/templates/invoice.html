@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Invoice</h2>
+
+<div class="mb-4">
+    <p><span class="font-semibold">Customer:</span> {{ purchase.customer_email }}</p>
+    <p><span class="font-semibold">Date:</span> {{ purchase.created_at }}</p>
+</div>
+
+<table class="w-full border-separate border border-gray-200 overflow-hidden">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="p-2">Product ID</th>
+            <th class="p-2">Qty</th>
+            <th class="p-2">Unit Price</th>
+            <th class="p-2">Tax</th>
+            <th class="p-2">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in purchase.items.all %}
+        <tr class="text-center">
+            <td class="p-2 border border-gray-300">{{ item.product.product_id }}</td>
+            <td class="p-2 border border-gray-300">{{ item.quantity }}</td>
+            <td class="p-2 border border-gray-300">{{ item.product.unit_price }}</td>
+            <td class="p-2 border border-gray-300">{{ item.tax_amount }}</td>
+            <td class="p-2 border border-gray-300">{{ item.total_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="mt-6 grid grid-cols-2 gap-4">
+    <div>
+        <p><strong>Total (Without Tax):</strong> {{ purchase.total_without_tax }}</p>
+        <p><strong>Total Tax:</strong> {{ purchase.total_tax }}</p>
+        <p><strong>Net Total:</strong> {{ purchase.net_total }}</p>
+        <p><strong>Rounded Total:</strong> {{ purchase.rounded_total }}</p>
+    </div>
+
+    <div>
+        <p><strong>Amount Paid:</strong> {{ purchase.amount_paid }}</p>
+        <p><strong>Balance Returned:</strong> {{ purchase.balance_returned }}</p>
+    </div>
+</div>
+
+<hr class="my-6">
+
+<h3 class="text-lg font-semibold mb-2">Balance Denominations</h3>
+
+<div class="grid grid-cols-4 gap-4">
+    {% for denom in remaining_denom %}
+        <div class="bg-gray-100 p-3 rounded-lg text-center shadow">
+            <p class="font-semibold">{{ denom.value }}</p>
+            <p>Available: {{ denom.available_count }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

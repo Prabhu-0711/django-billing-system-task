@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Purchase Detail</h2>
+
+<div class="mb-4">
+    <p><span class="font-semibold">Customer Email:</span> {{ purchase.customer_email }}</p>
+    <p><span class="font-semibold">Date:</span> {{ purchase.created_at }}</p>
+    <p><span class="font-semibold">Total Paid:</span> {{ purchase.amount_paid }}</p>
+    <p><span class="font-semibold">Net Total:</span> {{ purchase.rounded_total }}</p>
+</div>
+
+<hr>
+
+<h3 class="text-2xl font-bold my-6">Items Purchased</h3>
+
+<table class="w-full border-separate border border-gray-200 overflow-hidden">
+    <tr class="bg-blue-600 text-white">
+        <th class="p-2">Product ID</th>
+        <th class="p-2">Name</th>
+        <th class="p-2">Quantity</th>
+        <th class="p-2">Unit Price</th>
+        <th class="p-2">Tax</th>
+        <th class="p-2">Total</th>
+    </tr>
+
+    {% for item in purchase.items.all %}
+    <tr class="text-center">
+        <td class="p-2 border border-gray-300">{{ item.product.product_id }}</td>
+        <td class="p-2 border border-gray-300">{{ item.product.name }}</td>
+        <td class="p-2 border border-gray-300">{{ item.quantity }}</td>
+        <td class="p-2 border border-gray-300">{{ item.product.unit_price }}</td>
+        <td class="p-2 border border-gray-300">{{ item.tax_amount }}</td>
+        <td class="p-2 border border-gray-300">{{ item.total_price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

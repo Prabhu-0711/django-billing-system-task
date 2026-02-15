@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Previous Purchases</h2>
+
+<form method="GET" class="flex gap-4 mb-6">
+    <input type="email" name="email"
+           placeholder="Enter Customer Email"
+           class="border rounded-lg p-2 w-full">
+    <button type="submit"
+            class="bg-blue-600 text-white px-4 rounded-lg">
+        Search
+    </button>
+</form>
+
+{% if purchases %}
+<table class="w-full border">
+    <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="p-2">ID</th>
+            <th class="p-2">Date</th>
+            <th class="p-2">Total</th>
+            <th class="p-2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchase in purchases %}
+        <tr class="text-center border-b">
+            <td class="p-2">{{ purchase.id }}</td>
+            <td class="p-2">{{ purchase.created_at }}</td>
+            <td class="p-2">{{ purchase.rounded_total }}</td>
+            <td class="p-2">
+                <a href="{% url 'purchase_detail' purchase.id %}"
+                   class="text-blue-600 hover:underline">
+                    View
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

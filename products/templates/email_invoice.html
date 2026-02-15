@@ -1,0 +1,18 @@
+<h2>Invoice Summary</h2>
+
+<p>Purchase ID: {{ purchase.id }}</p>
+<p>Total Paid: {{ purchase.amount_paid }}</p>
+<p>Net Total: {{ purchase.rounded_total }}</p>
+<p>Balance Returned: {{ purchase.balance_returned }}</p>
+
+<h3>Items:</h3>
+
+<ul>
+{% for item in purchase.items.all %}
+    <li>
+        {{ item.product.name }} -
+        Qty: {{ item.quantity }} -
+        Total: {{ item.total_price }}
+    </li>
+{% endfor %}
+</ul>
