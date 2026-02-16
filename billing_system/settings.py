@@ -79,10 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'billing_system_db', # Database Name
-        'USER': 'postgres', # Username
-        'PASSWORD': '12345', # Password
-        'HOST': 'localhost', # Host/Address
-        'PORT': '5432' # Port
+        'USER': os.getenv('USER'), # Username
+        'PASSWORD': os.getenv('PASSWORD'), # Password
+        'HOST': os.getenv('HOST'), # Host/Address
+        'PORT': os.getenv('PORT') # Port
     }
 }
 
