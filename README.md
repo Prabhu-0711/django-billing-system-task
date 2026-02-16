@@ -68,6 +68,11 @@ pip install -r requirements.txt
 Create a `.env` file in the project root directory with your Gmail credentials:
 
 ```
+USER=username
+PASSWORD=password
+HOST=host/address
+PORT=port
+
 EMAIL_HOST_USER=your_email@gmail.com
 EMAIL_HOST_PASSWORD=your_app_password
 ```
