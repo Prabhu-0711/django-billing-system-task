@@ -4,22 +4,22 @@
 
 <h2 class="text-2xl font-bold mb-6">Billing Page</h2>
 
-<form method="POST" class="space-y-6">
+<form method="POST" id="billingForm" class="space-y-6">
     {% csrf_token %}
 
     <div>
         <label class="block font-medium mb-1">Customer Email</label>
         <input type="email" name="customer_email" placeholder="Customer Email Address"
-               class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
-               required>
+               class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200">
+        <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
     </div>
 
     <div id="products" class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4 product-row">
             <input type="text" name="product_id" placeholder="Product ID"
-                   class="border rounded-lg p-2" required>
+                   class="border rounded-lg p-2">
             <input type="number" name="quantity" placeholder="Quantity"
-                   class="border rounded-lg p-2" min="1" required>
+                   class="border rounded-lg p-2" min="1">
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         <div>
             <label class="block text-sm mb-2 font-semibold ">{{ denom }}</label>
             <input type="number" name="denom_{{ denom }}"
-                   class="border rounded-lg p-2 w-full" placeholder="Count">
+                   class="border rounded-lg p-2 w-full denomField" placeholder="Count">
         </div>
         {% endfor %}
     </div>
@@ -56,18 +56,103 @@
 </form>
 
 <script>
+
+$(document).ready(function () {
+
+    $("#billingForm").validate({
+
+        errorClass: "text-red-500 text-sm mt-1",
+        highlight: function (element) {
+            $(element).addClass("border-red-500");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("border-red-500");
+        },
+
+        rules: {
+            customer_email: {
+                required: true,
+                email: true
+            },
+            amount_paid: {
+                required: true,
+                number: true,
+                min: 1
+            }
+        },
+
+        messages: {
+            customer_email: {
+                required: "Email is required",
+                email: "Enter valid email"
+            },
+            amount_paid: {
+                required: "Amount is required",
+                min: "Amount must be greater than 0"
+            }
+        },
+
+        submitHandler: function (form) {
+
+            $(".text-red-500").remove(); // Clear previous error messages
+
+            // Validate dynamic product rows
+            let validProduct = false;
+            let hasError = false;
+
+            $(".product-row").each(function () {
+                const pid = $(this).find("input[name='product_id']");
+                const qty = $(this).find("input[name='quantity']");
+
+                if (pid.val().trim() !== "" || qty.val().trim() !== "") {
+
+                    validProduct = true;
+
+                    if (pid.val().trim() === "") {
+                        pid.after("<label class='text-red-500 text-sm'>Product ID required</label>");
+                        hasError = true;
+                    }
+
+                    if (qty.val().trim() === "" || qty.val() <= 0) {
+                        qty.after("<label class='text-red-500 text-sm'>Quantity must be > 0</label>");
+                        hasError = true;
+                    }
+                }
+            });
+
+            if (!validProduct) {
+                alert("Add at least one product.");
+                return false;
+            }
+
+            // Validate denominations
+            $(".denomField").each(function () {
+                if ($(this).val() < 0) {
+                    $(this).after("<label class='text-red-500 text-sm'>Cannot be negative</label>");
+                    hasError = true;
+                }
+            });
+
+            if (!hasError) {
+                form.submit();
+            }
+        }
+
+    });
+
+});
+
 function addField() {
     const container = document.getElementById("products");
 
     const row = document.createElement("div");
-    row.className = "grid grid-cols-2 gap-4 mt-2";
+    row.className = "grid grid-cols-2 gap-4 product-row mt-2";
 
     const productInput = document.createElement("input");
     productInput.type = "text";
     productInput.name = "product_id";
     productInput.placeholder = "Product ID";
     productInput.className = "border rounded-lg p-2";
-    productInput.required = true;
 
     const quantityInput = document.createElement("input");
     quantityInput.type = "number";
@@ -75,7 +160,6 @@ function addField() {
     quantityInput.placeholder = "Quantity";
     quantityInput.className = "border rounded-lg p-2";
     quantityInput.min = "1";
-    quantityInput.required = true;
 
     row.appendChild(productInput);
     row.appendChild(quantityInput);
