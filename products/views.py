@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 from threading import Thread
-from django.db.models import Prefetch
+from django.contrib import messages
 from .models import Product, Purchase, PurchaseItem, ShopDenomination
 from .utils import calculate_bill, calculate_balance_from_shop, DENOMINATIONS
 
@@ -80,7 +80,8 @@ def billing_page(request):
             "purchase": purchase,
             "items": purchase.items.all(),
             "balance_denom": balance_denom,
-            "remaining_denom": ShopDenomination.objects.all().order_by('-value')
+            "remaining_denom": ShopDenomination.objects.all().order_by('-value'),
+            "success": True
         })
 
     return render(request, "billing_page.html", {
