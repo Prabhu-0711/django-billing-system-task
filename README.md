@@ -32,12 +32,7 @@ Before running the project, ensure you have the following installed:
 ### 1. Extract the Project
 Extract the billing_system project folder to your desired location.
 
-### 2. Navigate to Project Directory
-```bash
-cd billing_system
-```
-
-### 3. Create and Activate Virtual Environment
+### 2. Create and Activate Virtual Environment
 
 **On Windows (PowerShell):**
 ```bash
@@ -57,7 +52,7 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-### 4. Install Dependencies
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
