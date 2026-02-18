@@ -245,7 +245,7 @@ psql -U postgres -h localhost -d postgres
 ## Project Structure
 
 ```
-billing_system/
+django-billing-system-task/
 ├── README.md                 # This file
 ├── manage.py                 # Django management script
 ├── requirements.txt          # Python dependencies
